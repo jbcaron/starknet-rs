@@ -50,10 +50,6 @@ pub struct Block {
     #[serde_as(as = "UfeHexOption")]
     pub state_root: Option<FieldElement>,
     pub status: BlockStatus,
-    #[serde_as(as = "UfeHex")]
-    pub eth_l1_gas_price: FieldElement,
-    #[serde_as(as = "UfeHex")]
-    pub strk_l1_gas_price: FieldElement,
     pub transactions: Vec<TransactionType>,
     pub transaction_receipts: Vec<ConfirmedTransactionReceipt>,
     // Field marked optional as old blocks don't include it yet. Drop optional once resolved.

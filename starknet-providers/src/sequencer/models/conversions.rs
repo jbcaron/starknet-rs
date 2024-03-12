@@ -47,16 +47,8 @@ impl TryFrom<Block> for core::MaybePendingBlockWithTxHashes {
                     timestamp: value.timestamp,
                     sequencer_address: value.sequencer_address.unwrap_or_default(),
                     l1_gas_price: core::ResourcePrice {
-                        price_in_strk: Some(
-                            value
-                                .strk_l1_gas_price
-                                .try_into()
-                                .map_err(|_| ConversionError)?,
-                        ),
-                        price_in_wei: value
-                            .eth_l1_gas_price
-                            .try_into()
-                            .map_err(|_| ConversionError)?,
+                        price_in_strk: Some(0),
+                        price_in_wei: 0,
                     },
                     starknet_version: value.starknet_version.ok_or(ConversionError)?,
                     transactions: value
@@ -77,16 +69,8 @@ impl TryFrom<Block> for core::MaybePendingBlockWithTxHashes {
                 sequencer_address: value.sequencer_address.unwrap_or_default(),
                 parent_hash: value.parent_block_hash,
                 l1_gas_price: core::ResourcePrice {
-                    price_in_strk: Some(
-                        value
-                            .strk_l1_gas_price
-                            .try_into()
-                            .map_err(|_| ConversionError)?,
-                    ),
-                    price_in_wei: value
-                        .eth_l1_gas_price
-                        .try_into()
-                        .map_err(|_| ConversionError)?,
+                    price_in_strk: Some(0),
+                    price_in_wei: 0,
                 },
                 starknet_version: value.starknet_version.ok_or(ConversionError)?,
             })),
@@ -112,16 +96,8 @@ impl TryFrom<Block> for core::MaybePendingBlockWithTxs {
                     timestamp: value.timestamp,
                     sequencer_address: value.sequencer_address.unwrap_or_default(),
                     l1_gas_price: core::ResourcePrice {
-                        price_in_strk: Some(
-                            value
-                                .strk_l1_gas_price
-                                .try_into()
-                                .map_err(|_| ConversionError)?,
-                        ),
-                        price_in_wei: value
-                            .eth_l1_gas_price
-                            .try_into()
-                            .map_err(|_| ConversionError)?,
+                        price_in_strk: Some(0),
+                        price_in_wei: 0,
                     },
                     starknet_version: value.starknet_version.ok_or(ConversionError)?,
                     transactions: value
@@ -142,16 +118,8 @@ impl TryFrom<Block> for core::MaybePendingBlockWithTxs {
                 sequencer_address: value.sequencer_address.unwrap_or_default(),
                 parent_hash: value.parent_block_hash,
                 l1_gas_price: core::ResourcePrice {
-                    price_in_strk: Some(
-                        value
-                            .strk_l1_gas_price
-                            .try_into()
-                            .map_err(|_| ConversionError)?,
-                    ),
-                    price_in_wei: value
-                        .eth_l1_gas_price
-                        .try_into()
-                        .map_err(|_| ConversionError)?,
+                    price_in_strk: Some(0),
+                    price_in_wei: 0,
                 },
                 starknet_version: value.starknet_version.ok_or(ConversionError)?,
             })),
