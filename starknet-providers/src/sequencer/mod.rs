@@ -26,6 +26,7 @@ pub struct SequencerGatewayProvider {
     gateway_url: Url,
     feeder_gateway_url: Url,
     chain_id: FieldElement,
+    api_key: Option<String>,
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -101,8 +102,9 @@ impl SequencerGatewayProvider {
         gateway_url: impl Into<Url>,
         feeder_gateway_url: impl Into<Url>,
         chain_id: FieldElement,
+        api_key: Option<String>
     ) -> Self {
-        Self::new_with_client(gateway_url, feeder_gateway_url, chain_id, Client::new())
+        Self::new_with_client(gateway_url, feeder_gateway_url, chain_id, Client::new(), api_key)
     }
 
     pub fn new_with_client(
@@ -110,13 +112,20 @@ impl SequencerGatewayProvider {
         feeder_gateway_url: impl Into<Url>,
         chain_id: FieldElement,
         client: Client,
+        api_key: Option<String>,
     ) -> Self {
         Self {
             client,
             gateway_url: gateway_url.into(),
             feeder_gateway_url: feeder_gateway_url.into(),
             chain_id,
+            api_key
         }
+    }
+
+    pub fn with_api_key(mut self, api_key: impl Into<Option<String>>) -> Self {
+        self.api_key = api_key.into();
+        self
     }
 
     pub fn starknet_alpha_mainnet() -> Self {
@@ -124,6 +133,7 @@ impl SequencerGatewayProvider {
             Url::parse("https://alpha-mainnet.starknet.io/gateway").unwrap(),
             Url::parse("https://alpha-mainnet.starknet.io/feeder_gateway").unwrap(),
             chain_id::MAINNET,
+            None
         )
     }
 
@@ -132,6 +142,7 @@ impl SequencerGatewayProvider {
             Url::parse("https://alpha4.starknet.io/gateway").unwrap(),
             Url::parse("https://alpha4.starknet.io/feeder_gateway").unwrap(),
             chain_id::TESTNET,
+            None
         )
     }
 
@@ -140,6 +151,7 @@ impl SequencerGatewayProvider {
             Url::parse("https://alpha4-2.starknet.io/gateway").unwrap(),
             Url::parse("https://alpha4-2.starknet.io/feeder_gateway").unwrap(),
             chain_id::TESTNET2,
+            None
         )
     }
 }
@@ -180,9 +192,13 @@ impl SequencerGatewayProvider {
     {
         trace!("Sending GET request to sequencer API ({})", url);
 
-        let res = self
-            .client
-            .get(url)
+        let mut req = self.client.get(url);
+
+        if let Some(api_key) = &self.api_key {
+            req = req.header("X-Throttling-Bypass", api_key);
+        }
+
+        let res = req
             .send()
             .await
             .map_err(GatewayClientError::Network)?;
