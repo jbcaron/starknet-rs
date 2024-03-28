@@ -1466,12 +1466,13 @@ pub struct ResourceBoundsMapping {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[cfg_attr(feature = "no_unknown_fields", serde(deny_unknown_fields))]
 pub struct ResourcePrice {
-    /// The price of one unit of the given resource, denominated in fri (10^-18 strk)
-    #[serde_as(as = "UfeHex")]
-    pub price_in_fri: FieldElement,
+    /// The price of one unit of the given resource, denominated in strk
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde_as(as = "Option<NumAsHex>")]
+    pub price_in_strk: Option<u64>,
     /// The price of one unit of the given resource, denominated in wei
-    #[serde_as(as = "UfeHex")]
-    pub price_in_wei: FieldElement,
+    #[serde_as(as = "NumAsHex")]
+    pub price_in_wei: u64,
 }
 
 /// Result page request.
